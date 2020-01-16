@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Shop\Admin;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\CategoryUpdateRequest;
 use App\Models\Category;
+use Illuminate\Contracts\Validation\Validator;
 
 class CategoryController extends BaseController
 {
@@ -63,9 +65,44 @@ class CategoryController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryUpdateRequest $request, $id)
     {
-        dd(__METHOD__);
+
+        /*$rules = [
+            'title'         => 'required|min:5|max:200',
+            'slug'          => 'max:200',
+            'description'   => 'string|max:500|min:3',
+            'parent_id'     => 'required|integer',
+        ];*/
+
+        // 2 способа валидации
+
+        // $validateData = $this->validate($request, $rules);
+        // $validateData = $request->validate($rules);
+        
+
+        $item = Category::find($id);
+        if(empty($item)) {
+            return back()
+                ->withErrors(['msg' => "Запись id=[{$id}] не найдена"])
+                ->withInput();
+        }
+
+        $data = $request->all();
+
+        $result = $item
+            ->fill($data)
+            ->save();
+
+        if($result) {
+            return redirect()
+                ->route('shop.admin.categories.edit', $item->id)
+                ->with(['success' => 'Успешно сохранено']);
+        } else {
+            return back()
+                ->withErrors(['msg' => 'Ошибка сохранения'])
+                ->withInput();
+        }
     }
 
 }
