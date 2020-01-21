@@ -4,8 +4,14 @@
 	@php
 		/** @var \App\Models\Category $item */
 	@endphp
-	<form action="{{ route('shop.admin.categories.update', $item->id) }}" method="POST">
-		@method('PATCH')
+
+	@if($item->exists)
+		<form action="{{ route('shop.admin.categories.update', $item->id) }}" method="POST">
+			@method('PATCH')
+	@else
+		<form action="{{ route('shop.admin.categories.store') }}" method="POST">
+	@endif
+
 		@csrf
 		<div class="container">
 

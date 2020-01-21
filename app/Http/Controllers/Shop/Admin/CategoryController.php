@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Shop\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\CategoryUpdateRequest;
+use App\Http\Requests\CategoryCreateRequest;
 use App\Models\Category;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Support\Str;
 
 class CategoryController extends BaseController
 {
@@ -28,7 +30,12 @@ class CategoryController extends BaseController
      */
     public function create()
     {
-        dd(__METHOD__);
+        $item = new Category();
+        $categoriesList = Category::all();
+
+        return view('shop.admin.categories.edit', compact(
+            'item', 'categoriesList'
+        ));
     }
 
     /**
@@ -37,9 +44,31 @@ class CategoryController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryCreateRequest $request)
     {
-        dd(__METHOD__);
+        $data = $request->input();
+
+        if (empty($data['slug'])) {
+            $data['slug'] = Str::slug($data['title']);
+        }
+        
+        // Первый способ сохранения
+        // $item = new Category($data);
+        // $item->save();
+
+        // Второй способ сохранения
+        $item = (new Category())->create($data);
+
+        if($item) {
+            return redirect()->route('shop.admin.categories.index')
+                ->with(['success' => "Категория {$item->title} успешно сохранена"])
+                ->withInput();
+        } else {
+            return back()
+                ->withErrors(['msg' => 'Ошибка сохранения категории'])
+                ->withInput();
+        }
+
     }
 
     /**
@@ -89,6 +118,8 @@ class CategoryController extends BaseController
         }
 
         $data = $request->all();
+
+        dd($data);
 
         $result = $item
             ->fill($data)

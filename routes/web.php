@@ -41,11 +41,20 @@ $groupData = [
 ];
 
 Route::group($groupData, function() {
-	// ShopCategory
+	// Category
 	$methods = ['index', 'edit', 'update', 'create', 'store'];
 	Route::resource('categories', 'CategoryController')
 		->only($methods)
 		->names('shop.admin.categories');
+});
+
+
+Route::group($groupData, function() {
+	// Brand
+	$methods = ['index', 'edit', 'update', 'create', 'store'];
+	Route::resource('brands', 'BrandController')
+		->only($methods)
+		->names('shop.admin.brands');
 });
 
 

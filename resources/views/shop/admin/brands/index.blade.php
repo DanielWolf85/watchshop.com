@@ -32,7 +32,9 @@
 		<div class="row justify-content-center">
 			<div class="col-md-12">
 				<nav class="navbar navbar-toggleable-md navbar-light bg-faded">
-					<a href="{{ route('shop.admin.categories.create') }}" class="btn btn-primary">Добавить категорию</a>
+					<a href="{{ route('shop.admin.brands.create') }}" class="btn btn-primary">
+						Добавить бренд
+					</a>
 				</nav>
 				<div class="card">
 					<div class="card-body">
@@ -40,20 +42,16 @@
 							<thead>
 								<tr>
 									<th>#</th>
-									<th>Категория</th>
-									<th>Родитель</th>
+									<th>Бренд</th>
 								</tr>
 							</thead>
 							<tbody>
 								@foreach($paginator as $item)
-									@php /** @var \App\Models\Category $item */ @endphp
+								@php /** @var \App\Models\Brand $item */ @endphp
 									<tr>
 										<td>{{ $item->id }}</td>
 										<td>
-											<a href="{{ route('shop.admin.categories.edit', $item->id) }}">{{ $item->title }}</a>
-										</td>
-										<td @if(in_array($item->parent_id, [0])) style="color: grey;" @endif>
-											{{ $item->parent_id }}
+											<a href="{{ route('shop.admin.brands.edit', $item->id) }}">{{ $item->name }}</a>
 										</td>
 									</tr>
 								@endforeach
