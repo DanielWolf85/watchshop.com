@@ -5,12 +5,27 @@ namespace App\Http\Controllers\Shop\Admin;
 use Illuminate\Http\Request;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Http\Requests\CategoryCreateRequest;
+use App\Repositories\CategoryRepository;
 use App\Models\Category;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Support\Str;
 
 class CategoryController extends BaseController
 {
+
+    /**
+     * @var CategoryRepository
+     */
+    private $categoryRepository;
+
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->categoryRepository = app(CategoryRepository::class);
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +33,8 @@ class CategoryController extends BaseController
      */
     public function index()
     {
-        $paginator = Category::paginate(5);
+        // $paginator = Category::paginate(5);
+        $paginator = $this->categoryRepository->getAllWithPaginate(5);
 
         return view('shop.admin.categories.index', compact('paginator'));
     }
@@ -79,8 +95,16 @@ class CategoryController extends BaseController
      */
     public function edit($id)
     {
-        $item = Category::findOrFail($id);
-        $categoriesList = Category::all();
+        // $item = Category::findOrFail($id);
+        // $categoriesList = Category::all();
+
+        $item = $this->categoryRepository->getEdit($id);
+
+        if (empty($item)) {
+            abort(404);
+        }
+
+        $categoriesList = $this->categoryRepository->getForComboBox();
 
         return view('shop.admin.categories.edit', compact(
             'item', 'categoriesList'
@@ -110,7 +134,8 @@ class CategoryController extends BaseController
         // $validateData = $request->validate($rules);
         
 
-        $item = Category::find($id);
+        $item = $this->categoryRepository->getEdit($id);
+        
         if(empty($item)) {
             return back()
                 ->withErrors(['msg' => "Запись id=[{$id}] не найдена"])
@@ -119,7 +144,6 @@ class CategoryController extends BaseController
 
         $data = $request->all();
 
-        dd($data);
 
         $result = $item
             ->fill($data)
@@ -128,10 +152,10 @@ class CategoryController extends BaseController
         if($result) {
             return redirect()
                 ->route('shop.admin.categories.edit', $item->id)
-                ->with(['success' => 'Успешно сохранено']);
+                ->with(['success' => "Категория успешно обновлена"]);
         } else {
             return back()
-                ->withErrors(['msg' => 'Ошибка сохранения'])
+                ->withErrors(['msg' => 'Ошибка сохранения категории'])
                 ->withInput();
         }
     }

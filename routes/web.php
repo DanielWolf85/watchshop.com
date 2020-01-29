@@ -46,15 +46,31 @@ Route::group($groupData, function() {
 	Route::resource('categories', 'CategoryController')
 		->only($methods)
 		->names('shop.admin.categories');
-});
 
-
-Route::group($groupData, function() {
 	// Brand
-	$methods = ['index', 'edit', 'update', 'create', 'store'];
 	Route::resource('brands', 'BrandController')
 		->only($methods)
 		->names('shop.admin.brands');
+
+	//Color
+	Route::resource('colors', 'ColorController')
+		->except(['show'])
+		->names('shop.admin.colors');
+
+	//Size
+	Route::resource('sizes', 'SizeController')
+		->except(['show'])
+		->names('shop.admin.sizes');
+
+	//Product
+	$productMethods = ['index', 'show', 'edit', 'update', 'create', 'store'];
+	Route::resource('products', 'ProductController')
+		->only($productMethods)
+		->names('shop.admin.products');
 });
+
+
+
+
 
 

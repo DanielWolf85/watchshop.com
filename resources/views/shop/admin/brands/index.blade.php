@@ -33,7 +33,7 @@
 			<div class="col-md-12">
 				<nav class="navbar navbar-toggleable-md navbar-light bg-faded">
 					<a href="{{ route('shop.admin.brands.create') }}" class="btn btn-primary">
-						Добавить бренд
+						Добавить новый бренд
 					</a>
 				</nav>
 				<div class="card">

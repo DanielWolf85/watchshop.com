@@ -7,9 +7,21 @@ use Illuminate\Http\Request;
 use App\Http\Requests\BrandUpdateRequest;
 use App\Http\Requests\BrandCreateRequest;
 use App\Models\Brand;
+use App\Repositories\BrandRepository;
 
 class BrandController extends BaseController
 {
+    /**
+     * @var BrandRepository
+     */
+    private $brandRepository;
+
+    function __construct()
+    {
+        $this->brandRepository = app(BrandRepository::class);
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +29,7 @@ class BrandController extends BaseController
      */
     public function index()
     {
-        $paginator = Brand::paginate(5);
+        $paginator = $this->brandRepository->getAllWithPaginate(5);
 
         return view('shop.admin.brands.index', compact('paginator'));
     }
@@ -71,7 +83,7 @@ class BrandController extends BaseController
      */
     public function edit($id)
     {
-        $item = Brand::findOrFail($id);
+        $item = $this->brandRepository->getEdit($id);
         
         return view('shop.admin.brands.edit', compact(
             'item'

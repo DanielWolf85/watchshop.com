@@ -46,7 +46,7 @@
 								@foreach($categoriesList as $categoriesOption)
 									<option value="{{ $categoriesOption->id }}"
 										@if($categoriesOption->id == $item->parent_id) selected="selected" @endif>
-										{{ $categoriesOption->id }}. {{ $categoriesOption->title }}		
+										{{ $categoriesOption->id_title }}		
 									</option>
 								@endforeach
 							</select>
