@@ -33,13 +33,8 @@ class ProductController extends BaseController
     {
         $paginator = $this->productRepository->getAllWithPaginate(5);
 
-        $categoriesList = $this->productRepository->getCatList();
-        $brandsList     = $this->productRepository->getBrandsList();
-        $colorsList     = $this->productRepository->getColorsList();
-        $sizesList      = $this->productRepository->getSizesList();
-
         return view('shop.admin.products.index', compact(
-            'paginator', 'categoriesList'
+            'paginator'
         ));
     }
 
@@ -83,10 +78,7 @@ class ProductController extends BaseController
      */
     public function edit($id)
     {
-        $item = $this->productRepository->getEdit($id);
-        $categoriesList = $this->productRepository->getCatList();
-
-        dd($categoriesList);
+        dd(__METHOD__);
     }
 
 
@@ -100,29 +92,7 @@ class ProductController extends BaseController
      */
     public function update(ProductUpdateRequest $request, $id)
     {
-        $item = $this->productRepository->getEdit($id);
-
-        if(empty($item)) {
-            return back()
-                ->withErrors(['msg' => 'Такой цвет не продукт не найден для обновления'])
-                ->withInput();
-        }
-
-        $data = $request->all();
-
-        $result = $item
-            ->fill($data)
-            ->save();
-
-        if(! $result) {
-            return back()
-                ->withErrors(['msg' => 'Ошибка обновления продукта'])
-                ->withInput();
-        } else {
-            return redirect()
-                ->route('shop.admin.products.index')
-                ->with(['success' => 'Продукт успешно обновлен']);
-        }
+       dd(__METHOD__);
     }
 
 

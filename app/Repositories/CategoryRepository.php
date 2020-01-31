@@ -65,7 +65,6 @@ class CategoryRepository extends CoreRepository
 			->toBase()
 			->get();
 
-		
 
 		return $result;
 	}
@@ -86,6 +85,7 @@ class CategoryRepository extends CoreRepository
 			->startConditions()
 			->select($columns)
 			->paginate($perPage);
+		
 		
 		return $result;
 	}

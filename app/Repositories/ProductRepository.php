@@ -53,29 +53,16 @@ class ProductRepository extends CoreRepository
 		$result = $this
 			->startConditions()
 			->select($columns)
-			->orderBy('id', 'DESC')
-			// ->with(['category', 'brand', 'color', 'size'])
-			/*->with([
-				'category' => function($query) {
-					$query->select(['id', 'title']);
-				},
-				'brand'    => function($query) {
-					$query->select(['id', 'name']);
-				},
-				'color'    => function($query) {
-					$query->select(['id', 'name']);
-				},
-				'size'     => function($query) {
-					$query->select(['id', 'name']);
-				},
-			])*/
 			->with([
 				'category:id,title',
 				'brand:id,name',
 				'color:id,name',
-				'size:id,name',
+				'size:id,name'
 			])
 			->paginate($perPage);
+		
+
+		
 
 		return $result;
 	}
